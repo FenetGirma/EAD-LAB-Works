@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lab Exam</title>
+  </head>
+  <body>
+    <div class="">
+      <a href="/todo2/books/addBooks">
+        <button>
+          <h2>Add a Book</h2>
+        </button>
+      </a>
+
+      <hr />
+
+      <a href="/todo2/books/displaybooks">
+        <button>
+          <h2>Display books</h2>
+        </button>
+      </a>
+
+      <hr />
+
+      <form action="/todo2/books/deletebooks" method="post">
+        <h2>Delete books</h2>
+        <label for="bookID">Book ID:</label>
+        <input type="text" id="bookID" name="id" />
+        <input type="submit" value="Delete" />
+      </form>
+
+      <hr />
+
+      <form action="/todo2/books/searchbooks" method="get">
+        <h2>Search for books</h2>
+        <label for="searchTerm">Search Term:</label>
+        <input type="text" id="searchTerm" name="title" />
+        <input type="submit" value="Search" />
+      </form>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,8 @@
+com\ead\lab\SearchBooksServlet.class
+com\ead\lab\Book.class
+com\ead\lab\DeleteBookServlet.class
+com\ead\lab\DisplayBooksServlet.class
+com\ead\lab\BookRegistrationServlet.class
+com\ead\lab\DispatcherServlet.class
+com\ead\lab\DBConnectionManager.class
+com\ead\lab\LoggingAspect.class
