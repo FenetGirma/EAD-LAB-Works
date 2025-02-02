@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.event.QRUtility;
+import com.event.attendee.Attendee;
+import com.event.attendee.AttendeeRepository;
 
 // import java.sql.Date;
 import java.util.List;
@@ -66,32 +68,58 @@ public class TicketService {
         ticketRepository.deleteById(id);
     }
 
-    public Ticket buyTicket(Long ticketId) {
-        Optional<Ticket> optionalTicket = ticketRepository.findById(ticketId);
-        
-        if (optionalTicket.isEmpty()) {
-            throw new RuntimeException("Ticket with ID " + ticketId + " not found.");
+    @Autowired
+private AttendeeRepository attendeeRepository; // Add repository for saving attendees
+
+public Ticket buyTicket(Long ticketId, List<Attendee> attendees, String purchaserEmail) {
+    Optional<Ticket> optionalTicket = ticketRepository.findById(ticketId);
+
+    if (optionalTicket.isEmpty()) {
+        throw new RuntimeException("Ticket with ID " + ticketId + " not found.");
+    }
+
+    Ticket ticket = optionalTicket.get();
+    Date now = new Date();
+
+    // Check if sales are open
+    if (ticket.getSalesStartDate() != null && now.before(ticket.getSalesStartDate())) {
+        throw new RuntimeException("Ticket sales have not started yet.");
+    }
+    if (ticket.getSalesEndDate() != null && now.after(ticket.getSalesEndDate())) {
+        throw new RuntimeException("Ticket sales have ended.");
+    }
+    if (ticket.getQuantityAvailable() - ticket.getQuantitySold() < attendees.size()) {
+        throw new RuntimeException("Not enough tickets available.");
+    }
+
+        // Process each attendee
+        for (Attendee attendee : attendees) {
+            Attendee newAttendee = new Attendee();
+            newAttendee.setName(attendee.getName());
+            newAttendee.setEmail(attendee.getEmail());
+            newAttendee.setEvent(ticket.getEvent());
+            newAttendee.setTicket(ticket);
+            newAttendee.setPurchaserEmail(purchaserEmail);
+
+            // Generate QR code data
+            String qrData = String.format("Name: %s, Email: %s, Event: %s, Ticket: %s",
+                    newAttendee.getName(),
+                    newAttendee.getEmail(),
+                    ticket.getEvent().getName(),
+                    ticket.getTicketType());
+
+            // Generate QR code
+            String qrCode = QRUtility.generateQRCode(qrData);
+
+            // Set the QR code to the attendee
+            newAttendee.setQrCode(qrCode);
+
+            attendeeRepository.save(newAttendee);
+            ticket.sellTicket(); // Reduce ticket availability for each purchase
         }
-    
-        Ticket ticket = optionalTicket.get();
-        Date now = new Date(); // ✅ Corrected line
-    
-        // Check if ticket sales are within allowed dates
-        if (ticket.getSalesStartDate() != null && now.before(ticket.getSalesStartDate())) {
-            throw new RuntimeException("Ticket sales have not started yet.");
-        }
-        if (ticket.getSalesEndDate() != null && now.after(ticket.getSalesEndDate())) {
-            throw new RuntimeException("Ticket sales have ended.");
-        }
-    
-        // Check if ticket is available
-        if (!ticket.isAvailable()) {
-            throw new RuntimeException("Ticket is sold out.");
-        }
-    
-        // Sell the ticket
-        ticket.sellTicket();
+
         return ticketRepository.save(ticket);
     }
-    
+
+
 }

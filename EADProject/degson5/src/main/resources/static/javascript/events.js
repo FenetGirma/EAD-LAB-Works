@@ -1,14 +1,13 @@
 // Event Management
 // ---------------------------------------
-const apiUrl = "http://localhost:8080/api/events"; // Backend API URL
+const apiUrl = "http://localhost:8080/api/events";
 
-// Fetch and display events in a table
 async function loadEvents() {
   try {
     const response = await fetch(apiUrl);
     const events = await response.json();
     const tbody = document.querySelector(".custom-table tbody");
-    tbody.innerHTML = ""; // Clear existing rows
+    tbody.innerHTML = "";
 
     events.forEach((event, index) => {
       const row = `
@@ -25,7 +24,7 @@ async function loadEvents() {
             <br />
           </td>
           <td>
-            <button class="btn btn-outline-primary btn-sm" onclick="editEvent(${
+            <button class="btn btn-outline-success btn-sm" onclick="editEvent(${
               event.id
             })"><i class="bi bi-pencil"></i> Edit</button>
             <button class="btn btn-outline-danger btn-sm" onclick="deleteEvent(${
@@ -41,7 +40,6 @@ async function loadEvents() {
   }
 }
 
-// Save a new event
 async function saveEvent() {
   const formData = new FormData();
   const event = {
@@ -70,7 +68,7 @@ async function saveEvent() {
         .getElementById("createEventModal")
         .querySelector(".btn-close")
         .click();
-      loadEvents(); // Refresh event list
+      loadEvents();
     } else {
       alert("Error creating event!");
     }
@@ -80,14 +78,13 @@ async function saveEvent() {
   }
 }
 
-// Delete an event
 async function deleteEvent(id) {
   if (confirm("Are you sure you want to delete this event?")) {
     try {
       const response = await fetch(`${apiUrl}/${id}`, { method: "DELETE" });
       if (response.ok) {
         alert("Event Deleted Successfully!");
-        loadEvents(); // Refresh event list
+        loadEvents();
       } else {
         alert("Error deleting event!");
       }
@@ -99,11 +96,9 @@ async function deleteEvent(id) {
 
 async function editEvent(eventId) {
   try {
-    // Fetch event details
     const response = await fetch(`${apiUrl}/${eventId}`);
     const event = await response.json();
 
-    // Populate the edit form fields
     document.getElementById("editEventId").value = event.id;
     document.getElementById("editEventName").value = event.name;
     document.getElementById("editEventCategory").value = event.category;
@@ -115,7 +110,6 @@ async function editEvent(eventId) {
 
     document.getElementById("editEventDescription").value = event.description;
 
-    // Show the edit modal
     const editModal = new bootstrap.Modal(
       document.getElementById("editEventModal")
     );
@@ -126,7 +120,6 @@ async function editEvent(eventId) {
   }
 }
 
-// Update event
 async function updateEvent() {
   const eventId = document.getElementById("editEventId").value;
   const event = {
@@ -152,7 +145,7 @@ async function updateEvent() {
         .getElementById("editEventModal")
         .querySelector(".btn-close")
         .click();
-      loadEvents(); // Refresh event list
+      loadEvents();
     } else {
       alert("Error updating event!");
     }
@@ -169,7 +162,7 @@ async function updateEvent() {
 function decodeToken(token) {
   try {
     const payloadBase64 = token.split(".")[1];
-    const payloadJson = atob(payloadBase64); // Decode Base64 payload
+    const payloadJson = atob(payloadBase64);
     return JSON.parse(payloadJson);
   } catch (error) {
     console.error("Invalid token format", error);
@@ -177,19 +170,17 @@ function decodeToken(token) {
   }
 }
 
-// Extract initials from email
 function getInitialsFromEmail(email) {
-  if (!email) return "NA"; // Default if email is missing
-  const parts = email.split("@")[0].split(/[._]/); // Split by dot or underscore
+  if (!email) return "NA";
+  const parts = email.split("@")[0].split(/[._]/);
   const initials = parts.map((part) => part.charAt(0).toUpperCase()).join("");
-  return initials.slice(0, 2); // Take first two initials
+  return initials.slice(0, 2);
 }
 
-// Save user initials to localStorage
 function saveInitialsFromToken(token) {
   const decodedToken = decodeToken(token);
   if (decodedToken && (decodedToken.email || decodedToken.sub)) {
-    const email = decodedToken.email || decodedToken.sub; // Fallback to 'sub' if 'email' is not present
+    const email = decodedToken.email || decodedToken.sub;
     const initials = getInitialsFromEmail(email);
     localStorage.setItem("userInitials", initials);
   } else {
@@ -197,21 +188,16 @@ function saveInitialsFromToken(token) {
   }
 }
 
-// Display initials in the profile circle
 function displayInitials() {
   const initials = localStorage.getItem("userInitials") || "NA";
   const profileCircle = document.querySelector(".profile");
   profileCircle.textContent = initials;
 }
 
-// Initialization on Page Load
-// ---------------------------------------
 document.addEventListener("DOMContentLoaded", () => {
-  // Load events
   loadEvents();
 
-  // Process JWT token for profile initials
-  const token = localStorage.getItem("authToken"); // Replace 'authToken' with your token key
+  const token = localStorage.getItem("authToken");
   if (token) {
     saveInitialsFromToken(token);
   }

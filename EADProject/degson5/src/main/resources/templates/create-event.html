@@ -42,11 +42,11 @@
         min-height: 100vh;
       }
 
-      /* Section header styling with green variations */
+      
       h2.section-header {
         font-weight: 700;
         font-size: 1.8rem;
-        color: #38a169; /* Primary green */
+        color: #38a169; 
         margin-bottom: 20px;
       }
 
@@ -55,7 +55,7 @@
         font-size: 1.4rem;
         margin-top: 30px;
         margin-bottom: 15px;
-        color: #48bb78; /* Slightly lighter green */
+        color: #48bb78; 
         border-bottom: 2px solid #e2e8f0;
         padding-bottom: 5px;
       }
@@ -173,33 +173,38 @@
       }
 
       .glass-image {
-        background: rgba(255, 255, 255, 0.8); /* Example glass effect */
+        background: rgba(255, 255, 255, 0.8); 
         padding: 20px;
-        border-radius: 10px; /* Rounded corners for the glass effect */
+        border-radius: 10px; 
       }
 
       .icon-container {
         display: flex;
-        align-items: center; /* Center items vertically */
+        align-items: center; 
       }
 
       .profile {
-        width: 40px; /* Adjust size as needed */
-        height: 40px; /* Adjust size as needed */
-        background-color: #48bb78; /* Green background */
-        color: white; /* Text color */
-        border-radius: 50%; /* Circle shape */
+        width: 40px; 
+        height: 40px; 
+        background-color: #48bb78; 
+        color: white; 
+        border-radius: 50%; 
         display: flex;
-        align-items: center; /* Center text vertically */
-        justify-content: center; /* Center text horizontally */
-        margin-right: 10px; /* Space between the profile and logout */
-        font-weight: bold; /* Optional: make the text stand out */
+        align-items: center; 
+        justify-content: center;
+        margin-right: 10px; 
+        font-weight: bold; 
       }
 
       a {
-        text-decoration: none; /* Remove underline */
-        color: black; /* Link color */
-        font-weight: 500; /* Optional: make the link text bold */
+        text-decoration: none; 
+        color: black; 
+        font-weight: 500; 
+      }
+
+      .confirm-logout {
+        background-color: #48bb78;
+        color: white;
       }
     </style>
   </head>
@@ -221,19 +226,23 @@
         <div class="glass-image mt-4">
           <div class="icon-container">
             <div class="profile"></div>
-            <a href="login.html" onclick="logout()">
+            <a
+              class="nav-link"
+              href="javascript:void(0);"
+              onclick="confirmLogout()"
+            >
               <i class="bi bi-box-arrow-right"></i> Logout
             </a>
           </div>
         </div>
       </div>
 
-    <!-- Main Content -->
+   
     <div class="main-container">
       <h2 class="create-header">Create New Event</h2>
       <div class="card-custom">
         <form id="createEventForm" method="POST" enctype="multipart/form-data">
-          <!-- Event Details -->
+        
           <div class="row g-4">
             <h3 class="section-header">Event Details</h3>
             <div class="col-md-6">
@@ -259,14 +268,17 @@
             </div>
             <div class="col-md-6">
               <label for="eventCategory" class="form-label">Category</label>
-              <input
-                type="text"
-                id="eventCategory"
-                name="category"
-                class="form-control"
-                placeholder="Enter event category"
-                required
-              />
+              <select id="eventCategory" name="category" class="form-control" required>
+                <option value="" disabled selected>Select event category</option>
+                <option value="Music">Music</option>
+                <option value="Tech">Tech</option>
+                <option value="Networking">Networking</option>
+                <option value="Art">Art</option>
+                <option value="Business">Business</option>
+                <option value="Education">Education</option>
+                <option value="Sports">Sports</option>
+                <option value="Health">Health</option>
+              </select>
             </div>
             <div class="col-md-6">
               <label for="eventLocation" class="form-label">Location</label>
@@ -291,13 +303,17 @@
             </div>
             <div class="col-md-6">
               <label for="eventTags" class="form-label">Tags</label>
-              <input
-                type="text"
-                id="eventTags"
-                name="tags"
-                class="form-control"
-                placeholder="e.g., Music, Tech, Networking"
-              />
+              <select id="eventTags" name="tags" class="form-control" multiple required>
+                <option value="Music">Music</option>
+                <option value="Tech">Tech</option>
+                <option value="Networking">Networking</option>
+                <option value="Art">Art</option>
+                <option value="Business">Business</option>
+                <option value="Education">Education</option>
+                <option value="Sports">Sports</option>
+                <option value="Health">Health</option>
+              </select>
+              
             </div>
             <div class="col-12">
               <label for="eventDescription" class="form-label"
@@ -314,19 +330,20 @@
             </div>
           </div>
 
-          <!-- Ticket Details -->
+          
           <h3 class="section-header">Ticket Details</h3>
           <div class="row g-4" id="ticketDetails">
             <div class="col-md-6">
               <label for="ticketType" class="form-label">Ticket Type</label>
-              <input
-                type="text"
-                id="ticketType"
-                name="tickets[0].ticketType"
-                class="form-control"
-                placeholder="e.g., General Admission, VIP"
-                required
-              />
+              <select id="ticketType" name="tickets[0].ticketType" class="form-control" required>
+                <option value="" disabled selected>Select ticket type</option>
+                <option value="General Admission">General Admission</option>
+                <option value="VIP">VIP</option>
+                <option value="Early Bird">Early Bird</option>
+                <option value="Student">Student</option>
+                <option value="Group">Group</option>
+                <option value="Corporate">Corporate</option>
+              </select>
             </div>
             <div class="col-md-6">
               <label for="ticketPrice" class="form-label">Price</label>
@@ -397,15 +414,54 @@
     </div>
 
 
-    <script th:src="@{/javascript/events.js}"></script>
+    <div
+      class="modal fade"
+      id="logoutModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="logoutModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-body">Are you sure you want to logout?</div>
+          <div class="modal-footer container grid justify-content-float-right">
+            <div class="row">
+              <div class="col-6">
+                <button
+                  type="button"
+                  class="btn btn-secondary btn-sm"
+                  data-bs-dismiss="modal"
+                >
+                  Cancel
+                </button>
+              </div>
+              <div class="col-6">
+                <button
+                  type="button"
+                  class="btn confirm-logout btn-sm"
+                  onclick="logout()"
+                >
+                  Logout
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+   
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/javascript/events.js}"></script>
     <script>
       document
         .getElementById("createEventForm")
         .addEventListener("submit", async function (e) {
-          e.preventDefault(); // Prevent form from refreshing the page
+          e.preventDefault(); 
 
-          // Retrieve authToken from local storage
+          
           const authToken = localStorage.getItem("authToken");
           console.log("Auth Token:", authToken);
 
@@ -415,7 +471,7 @@
             return;
           }
 
-          // Decode JWT to extract email
+          
           function parseJwt(token) {
             try {
               const base64Url = token.split(".")[1];
@@ -441,10 +497,10 @@
             return;
           }
 
-          // Collect form data
+       
           const formData = new FormData(this);
 
-          // Prepare the ticket data dynamically
+          
           const tickets = [];
           const ticketFields = document.querySelectorAll(
             "#ticketDetails .form-control"
@@ -468,7 +524,7 @@
             tickets.push(ticket);
           }
 
-          // Add the tickets array to formData as JSON
+          
           formData.append(
             "event",
             JSON.stringify({
@@ -479,16 +535,16 @@
               date: formData.get("date"),
               tags: formData.get("tags"),
               tickets: tickets,
-              createdBy: createdBy, // Include the email from the decoded token
+              createdBy: createdBy, 
             })
           );
 
-          // Send the POST request to your backend
+          
           try {
             const response = await fetch("/api/events", {
               method: "POST",
               headers: {
-                Authorization: `Bearer ${authToken}`, // Send token for authentication
+                Authorization: `Bearer ${authToken}`, 
               },
               body: formData,
             });
@@ -497,7 +553,7 @@
               const data = await response.json();
               alert("Event created successfully!");
               console.log("Event created:", data);
-              window.location.href = "/events.html"; // Redirect to events page
+              window.location.href = "/events.html"; 
             } else {
               const error = await response.json();
               alert(`Error creating event: ${error.message}`);
@@ -507,6 +563,19 @@
             alert("An unexpected error occurred.");
           }
         });
+
+        function confirmLogout() {
+          $("#logoutModal").modal("show");
+          console.log("Logging out...");
+        }
+        function logout() {
+         
+          localStorage.clear();
+          
+          console.log("Local storage cleared. Logging out...");
+          
+          window.location.href = "login.html";
+        }
     </script>
   </body>
 </html>

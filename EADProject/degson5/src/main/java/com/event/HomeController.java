@@ -17,27 +17,27 @@ public class HomeController {
 
     @GetMapping("/")
     public String home() {
-        return "index"; // This matches index.html in the templates directory
+        return "index";   
     }
     @GetMapping("/signup.html")
 public String signup() {
-    return "signup"; // This matches signup.html in the templates directory
+    return "signup";   
 }
 @GetMapping("/signupAdmin.html")
 public String signupAdmin() {
-    return "signupAdmin"; // This matches signup.html in the templates directory
+    return "signupAdmin";   
 }
 @GetMapping("/login.html")
 public String login() {
-    return "login"; // This matches signup.html in the templates directory
+    return "login";   
 }
 @GetMapping("/events.html")
 public String events() {
-    return "events"; // This matches signup.html in the templates directory
+    return "events";   
 }
 @GetMapping("/eventsUser.html")
 public String eventsUser() {
-    return "eventsUser"; // This matches signup.html in the templates directory
+    return "eventsUser";   
 }
 @GetMapping("/schedule.html")
     public String schedule() {
@@ -47,22 +47,29 @@ public String eventsUser() {
     
 @GetMapping("/tickets.html")
 public String tickets() {
-    return "tickets"; // This matches signup.html in the templates directory
+    return "tickets";   
 }
 
 @GetMapping("/create-event.html")
 public String createvent() {
-    return "create-event"; // This matches signup.html in the templates directory
+    return "create-event";   
 }
 @GetMapping("/attendee.html")
 public String attendee() {
-    return "attendee"; // This matches signup.html in the templates directory
+    return "attendee";   
 }
 
 @GetMapping("/contact.html")
     public String contact() {
         return "contact";
     }
+
+    @GetMapping("/Dashboard.html")
+    public String Dashboard() {
+        return "Dashboard";
+    }
+
+
 
     @PostMapping("/contact/send")
     @ResponseBody
@@ -72,7 +79,7 @@ public String attendee() {
         try {
             SimpleMailMessage mailMessage = new SimpleMailMessage();
             mailMessage.setFrom("eaddemo20@gmail.com");
-            mailMessage.setTo("lidyagebretsadikw@gmail.com"); // Send to admin email
+            mailMessage.setTo("lidyagebretsadikw@gmail.com");   
             mailMessage.setSubject("New Contact Us Message from " + name);
             mailMessage.setText("Email: " + email + "\n\nMessage:\n" + message);
 

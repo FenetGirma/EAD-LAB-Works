@@ -27,7 +27,7 @@ public class Event {
     
 
 
-    // Getters and Setters
+      
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getName() { return name; }
@@ -60,7 +60,7 @@ class Ticket {
     private Date salesStartDate;
     private Date salesEndDate;
 
-    // Getters and Setters
+      
     public String getTicketType() { return ticketType; }
     public void setTicketType(String ticketType) { this.ticketType = ticketType; }
     public double getPrice() { return price; }

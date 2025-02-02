@@ -20,7 +20,7 @@ public class EventService {
     }
 
     public Event createEvent(Event event) {
-        // Validate tickets
+          
         if (event.getTickets() == null || event.getTickets().isEmpty()) {
             throw new IllegalArgumentException("At least one ticket must be provided.");
         }

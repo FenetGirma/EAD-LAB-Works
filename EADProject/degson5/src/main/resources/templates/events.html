@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Events - Event Management System</title>
+    <title>Events - Degson Event Management System</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -163,7 +163,7 @@
       }
 
       .top-bar .icon-container i:hover {
-        color: #0d6efd;
+        color: #3aa366;
       }
 
       .top-bar .profile {
@@ -268,7 +268,7 @@
         transform: scale(1.1);
       }
 
-      .btn-outline-primary,
+      .btn-outline-success,
       .btn-outline-danger {
         border-radius: 8px;
         padding: 10px 14px;
@@ -276,7 +276,7 @@
         font-size: 0.9rem;
       }
 
-      .btn-outline-primary:hover {
+      .btn-outline-success:hover {
         background-color: #48bb78;
         color: white;
         border-color: #48bb78;
@@ -289,33 +289,37 @@
       }
 
       .glass-image {
-        background: rgba(255, 255, 255, 0.8); /* Example glass effect */
+        background: rgba(255, 255, 255, 0.8); 
         padding: 20px;
-        border-radius: 10px; /* Rounded corners for the glass effect */
+        border-radius: 10px; 
       }
 
       .icon-container {
         display: flex;
-        align-items: center; /* Center items vertically */
+        align-items: center;
       }
 
       .profile {
-        width: 40px; /* Adjust size as needed */
-        height: 40px; /* Adjust size as needed */
-        background-color: #48bb78; /* Green background */
-        color: white; /* Text color */
-        border-radius: 50%; /* Circle shape */
+        width: 40px; 
+        height: 40px; 
+        background-color: #48bb78;
+        color: white;
+        border-radius: 50%;
         display: flex;
-        align-items: center; /* Center text vertically */
-        justify-content: center; /* Center text horizontally */
-        margin-right: 10px; /* Space between the profile and logout */
-        font-weight: bold; /* Optional: make the text stand out */
+        align-items: center; 
+        justify-content: center; 
+        margin-right: 10px;
+        font-weight: bold; 
       }
 
       a {
-        text-decoration: none; /* Remove underline */
-        color: black; /* Link color */
-        font-weight: 500; /* Optional: make the link text bold */
+        text-decoration: none; 
+        font-weight: 500; 
+      }
+
+      .confirm-logout {
+        background-color: #48bb78;
+        color: white;
       }
     </style>
   </head>
@@ -337,7 +341,11 @@
         <div class="glass-image mt-4">
           <div class="icon-container">
             <div class="profile"></div>
-            <a href="login.html" onclick="logout()">
+            <a 
+            class="nav-link"
+            href="javascript:void(0);"
+            onclick="confirmLogout()"
+            >
               <i class="bi bi-box-arrow-right"></i> Logout
             </a>
           </div>
@@ -462,18 +470,61 @@
         </table>
       </div>
     </div>
+
+    <div
+      class="modal fade"
+      id="logoutModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="logoutModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-body">Are you sure you want to logout?</div>
+          <div class="modal-footer container grid justify-content-float-right">
+            <div class="row">
+              <div class="col-6">
+                <button
+                  type="button"
+                  class="btn btn-secondary btn-sm"
+                  data-bs-dismiss="modal"
+                >
+                  Cancel
+                </button>
+              </div>
+              <div class="col-6">
+                <button
+                  type="button"
+                  class="btn confirm-logout btn-sm"
+                  onclick="logout()"
+                >
+                  Logout
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+   
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+      function confirmLogout() {
+        $("#logoutModal").modal("show");
+        console.log("Logging out...");
+      }
       function logout() {
-        // Clear the local storage
+       
         localStorage.clear();
-        // Optional: Add a confirmation message or log for debugging
+        
         console.log("Local storage cleared. Logging out...");
-        // Redirect to the login page
+        
         window.location.href = "login.html";
       }
-    </script>
+    
 
-    <script>
       const urlParams = new URLSearchParams(window.location.search);
       const token = urlParams.get("token");
 
@@ -483,6 +534,10 @@
       } else {
         console.error("No token found in URL");
       }
+
+      
+    
+      
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

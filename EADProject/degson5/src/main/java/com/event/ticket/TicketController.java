@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.event.attendee.Attendee;
+
 import java.util.List;
 
 @RestController
@@ -40,14 +42,21 @@ public ResponseEntity<Ticket> getTicket(@PathVariable Long id) {
         return ticketService.createTicket(ticket);
     }
     @PostMapping("/buy/{ticketId}")
-public ResponseEntity<Ticket> buyTicket(@PathVariable Long ticketId) {
+public ResponseEntity<Ticket> buyTicket(
+    @PathVariable Long ticketId,
+    @RequestParam String purchaserEmail,
+    @RequestBody List<Attendee> attendees
+) {
     try {
-        Ticket purchasedTicket = ticketService.buyTicket(ticketId);
+        Ticket purchasedTicket = ticketService.buyTicket(ticketId, attendees, purchaserEmail);
         return ResponseEntity.ok(purchasedTicket);
     } catch (RuntimeException e) {
         return ResponseEntity.badRequest().body(null);
     }
 }
+
+
+
 
 
     // Update a ticket

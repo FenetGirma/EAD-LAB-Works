@@ -24,11 +24,16 @@ public class AttendeeController {
 
     @PostMapping
     public Attendee addAttendee(@RequestBody Attendee attendee) {
-        return attendeeService.saveAttendee(attendee);
+        return attendeeService.saveAttendeeWithQRCode(attendee);
     }
 
     @DeleteMapping("/{attendeeId}")
     public void deleteAttendee(@PathVariable Long attendeeId) {
         attendeeService.deleteAttendee(attendeeId);
+    }
+
+    @GetMapping("/tickets")
+    public List<Attendee> getTicketsByPurchaser(@RequestParam String email) {
+        return attendeeService.getAttendeesByPurchaserEmail(email);
     }
 }

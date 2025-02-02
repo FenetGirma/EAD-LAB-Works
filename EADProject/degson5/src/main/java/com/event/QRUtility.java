@@ -19,7 +19,7 @@ public class QRUtility {
         try {
             QRCodeWriter qrCodeWriter = new QRCodeWriter();
             Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
-            hints.put(EncodeHintType.MARGIN, 1); // Reduce margin
+            hints.put(EncodeHintType.MARGIN, 1);   
             BitMatrix bitMatrix = qrCodeWriter.encode(data, BarcodeFormat.QR_CODE, 250, 250, hints);
 
             BufferedImage image = MatrixToImageWriter.toBufferedImage(bitMatrix);

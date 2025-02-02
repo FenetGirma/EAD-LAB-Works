@@ -13,7 +13,7 @@
       rel="stylesheet"
     />
     <style>
-      /* Add your styles here */
+      
       body {
         font-family: "Poppins", sans-serif;
         background-color: #f4f7fe;
@@ -118,33 +118,38 @@
       }
 
       .glass-image {
-        background: rgba(255, 255, 255, 0.8); /* Example glass effect */
+        background: rgba(255, 255, 255, 0.8);
         padding: 20px;
-        border-radius: 10px; /* Rounded corners for the glass effect */
+        border-radius: 10px;
       }
 
       .icon-container {
         display: flex;
-        align-items: center; /* Center items vertically */
+        align-items: center;
       }
 
       .profile {
-        width: 40px; /* Adjust size as needed */
-        height: 40px; /* Adjust size as needed */
-        background-color: #48bb78; /* Green background */
-        color: white; /* Text color */
-        border-radius: 50%; /* Circle shape */
+        width: 40px;
+        height: 40px;
+        background-color: #48bb78; 
+        color: white; 
+        border-radius: 50%;
         display: flex;
-        align-items: center; /* Center text vertically */
-        justify-content: center; /* Center text horizontally */
-        margin-right: 10px; /* Space between the profile and logout */
-        font-weight: bold; /* Optional: make the text stand out */
+        align-items: center; 
+        justify-content: center; 
+        margin-right: 10px; 
+        font-weight: bold; 
       }
 
       a {
-        text-decoration: none; /* Remove underline */
-        color: black; /* Link color */
-        font-weight: 500; /* Optional: make the link text bold */
+        text-decoration: none;
+        color: black;
+        font-weight: 500;
+      }
+
+      .confirm-logout {
+        background-color: #48bb78;
+        color: white;
       }
     </style>
   </head>
@@ -153,91 +158,124 @@
     <div class="d-flex">
       <div class="sidebar">
         <div class="logo mb-4">
-          <a href="index.html" class="text-decoration-none d-flex align-items-center">
-            <img src="wmremove-transformed.png" alt="Logo" class="rounded-circle me-2" style="width: 110px; height: 85px" />
+          <a
+            href="index.html"
+            class="text-decoration-none d-flex align-items-center"
+          >
+            <img
+              src="wmremove-transformed.png"
+              alt="Logo"
+              class="rounded-circle me-2"
+              style="width: 110px; height: 85px"
+            />
           </a>
         </div>
         <div class="links flex-grow-1">
-          <a href="create-event.html"><i class="bi bi-plus-circle"></i> Create Event</a>
-          <a href="events.html" ><i class="bi bi-calendar-event"></i> Events</a>
+          <a href="create-event.html"
+            ><i class="bi bi-plus-circle"></i> Create Event</a
+          >
+          <a href="events.html"><i class="bi bi-calendar-event"></i> Events</a>
           <a href="tickets.html"><i class="bi bi-ticket"></i> Tickets</a>
-          <a href="attendee.html" class="active"><i class="bi bi-people-fill"></i> Attendees</a>
+          <a href="attendee.html" class="active"
+            ><i class="bi bi-people-fill"></i> Attendees</a
+          >
         </div>
         <div class="glass-image mt-4">
           <div class="icon-container">
             <div class="profile"></div>
-            <a href="login.html" onclick="logout()">
+            <a
+              class="nav-link"
+              href="javascript:void(0);"
+              onclick="confirmLogout()"
+            >
               <i class="bi bi-box-arrow-right"></i> Logout
             </a>
           </div>
         </div>
       </div>
 
-    <div class="main-container">
-      <h1 class="section-header">Attendee Management</h1>
-      <div class="card-custom">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              
-              <th scope="col">Name</th>
-              <th scope="col">Email</th>
-              <th scope="col">Event Name</th>
-            </tr>
-          </thead>
-          <tbody id="attendeeTableBody">
-            <!-- Rows will be populated dynamically -->
-          </tbody>
-        </table>
+      <div class="main-container">
+        <h1 class="section-header">Attendee Management</h1>
+        <div class="card-custom">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Event Name</th>
+              </tr>
+            </thead>
+            <tbody id="attendeeTableBody"></tbody>
+          </table>
 
-        <form id="addAttendeeForm" class="mt-4">
-          <div class="row g-3">
-            <div class="col-md-4">
-              <label for="attendeeName" class="form-label">Event ID</label>
-              <input
-                type="number"
-                id="eventId"
-                class="form-control"
-                placeholder="Enter Event ID"
-                required
-              />
+          <form id="addAttendeeForm" class="mt-4">
+            <div class="row g-3">
+              
+             
             </div>
-            <div class="col-md-4">
-              <label for="attendeeName" class="form-label">Name</label>
-              <input
-                type="text"
-                id="attendeeName"
-                class="form-control"
-                placeholder="Enter attendee name"
-                required
-              />
-            </div>
-            <div class="col-md-4">
-              <label for="attendeeEmail" class="form-label">Email</label>
-              <input
-                type="email"
-                id="attendeeEmail"
-                class="form-control"
-                placeholder="Enter attendee email"
-                required
-              />
-            </div>
-            <div class="col-md-2 d-flex align-items-end">
-              <button type="submit" class="btn-custom">Add</button>
+          </form>
+        </div>
+      </div>
+
+      <div
+      class="modal fade"
+      id="logoutModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="logoutModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-body">Are you sure you want to logout?</div>
+          <div class="modal-footer container grid justify-content-float-right">
+            <div class="row">
+              <div class="col-6">
+                <button
+                  type="button"
+                  class="btn btn-secondary btn-sm"
+                  data-bs-dismiss="modal"
+                >
+                  Cancel
+                </button>
+              </div>
+              <div class="col-6">
+                <button
+                  type="button"
+                  class="btn confirm-logout btn-sm"
+                  onclick="logout()"
+                >
+                  Logout
+                </button>
+              </div>
             </div>
           </div>
-        </form>
+        </div>
       </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script th:src="@{/javascript/events.js}"></script>
+    
     <script>
+      function confirmLogout() {
+        $("#logoutModal").modal("show");
+        console.log("Logging out...");
+      }
+      function logout() {
+        localStorage.clear();
+
+        console.log("Local storage cleared. Logging out...");
+
+        window.location.href = "login.html";
+      }
+
       const attendeeTableBody = document.getElementById("attendeeTableBody");
       const addAttendeeForm = document.getElementById("addAttendeeForm");
 
-      const API_URL = "http://localhost:8080/api/attendees"; // Replace with your actual backend URL
+      const API_URL = "http://localhost:8080/api/attendees";
 
-      // Fetch and render attendees from the backend
       async function fetchAttendees() {
         try {
           const response = await fetch(API_URL);
@@ -251,7 +289,7 @@
         }
       }
 
-      // Render attendees in the table
+      
       function renderAttendees(attendees) {
         attendeeTableBody.innerHTML = "";
         attendees.forEach((attendee, index) => {
@@ -266,46 +304,46 @@
         });
       }
 
-      // Add a new attendee
+     
       addAttendeeForm.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        // Get form input values
+        
         const name = document.getElementById("attendeeName").value.trim();
         const email = document.getElementById("attendeeEmail").value.trim();
         const eventId = document.getElementById("eventId").value.trim();
 
-        // Check for empty fields
+        
         if (!name || !email || !eventId) {
           alert("Please fill in all fields.");
           return;
         }
 
         try {
-          // Prepare request payload
+          
           const attendeeData = {
             name,
             email,
-            event: { id: parseInt(eventId, 10) }, // Ensure event ID is sent as a number
+            event: { id: parseInt(eventId, 10) }, 
           };
 
-          // Send the POST request to the API
+          
           const response = await fetch(API_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(attendeeData),
           });
 
-          // Check if the response is successful
+          
           if (!response.ok) {
-            const errorText = await response.text(); // Get detailed error message if available
+            const errorText = await response.text(); 
             throw new Error(`Failed to add attendee: ${errorText}`);
           }
 
-          // Fetch the updated list of attendees
+          
           await fetchAttendees();
 
-          // Reset the form and provide feedback
+          
           addAttendeeForm.reset();
           alert("Attendee added successfully!");
         } catch (error) {

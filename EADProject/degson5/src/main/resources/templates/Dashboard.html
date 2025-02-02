@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #f4f7fe;
+        margin: 0;
+        display: flex;
+      }
+
+      .sidebar {
+        width: 250px;
+        height: 100vh;
+        background-color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: fixed;
+        padding-top: 20px;
+        align-items: center;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.06);
+      }
+
+      .sidebar a {
+        display: flex;
+        align-items: center;
+        padding: 15px 20px;
+        text-decoration: none;
+        font-size: 1rem;
+        color: #939fbd;
+        transition: all 0.3s ease;
+        width: 100%;
+      }
+
+      .sidebar a i {
+        font-size: 1.2rem;
+        margin-right: 15px;
+        transition: color 0.3s ease;
+      }
+
+      .sidebar a.active {
+        color: black;
+        background-color: #f4f7fe;
+        font-weight: 600;
+      }
+
+      .sidebar a.active i {
+        color: #48bb78;
+      }
+      .sidebar a:hover {
+        color: black;
+        background-color: #f4f7fe;
+      }
+      .sidebar a:hover i {
+        color: #48bb78;
+      }
+
+      .glass-image {
+        background: rgba(255, 255, 255, 0.8);
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+      }
+
+      .icon-container {
+        display: flex;
+        align-items: center;
+      }
+
+      .profile {
+        width: 40px;
+        height: 40px;
+        background-color: #48bb78;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 10px;
+        font-weight: bold;
+      }
+
+      .main-container {
+        margin-left: 250px;
+        padding: 20px;
+        flex-grow: 1;
+        background-color: #f8f9fe;
+        min-height: 100vh;
+      }
+
+      .card {
+        border-radius: 15px;
+        padding: 20px;
+        background: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      h2 {
+        color: #38a169;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sidebar">
+      <div class="logo mb-4">
+        <a
+          href="index.html"
+          class="text-decoration-none d-flex align-items-center"
+        >
+          <img
+            src="wmremove-transformed.png"
+            alt="Logo"
+            class="rounded-circle me-2"
+            style="width: 110px; height: 85px"
+          />
+        </a>
+      </div>
+      <div class="links flex-grow-1">
+        <a href="dashboard.html" class="active">
+          <i class="bi bi-bar-chart-fill"></i> Dashboard
+        </a>
+        <a href="create-event.html"
+          ><i class="bi bi-plus-circle-fill"></i> Create Event</a
+        >
+        <a href="events.html"><i class="bi bi-calendar-event"></i> Events</a>
+        <a href="tickets.html"><i class="bi bi-ticket"></i> Tickets</a>
+        <a href="attendee.html"><i class="bi bi-people"></i> Attendees</a>
+      </div>
+      <div class="glass-image mt-4">
+        <div class="icon-container">
+          <div class="profile">U</div>
+          <a href="login.html" onclick="logout()">
+            <i class="bi bi-box-arrow-right"></i> Logout
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="main-container">
+      <h2 class="text-center mb-4">Event Analytics Dashboard</h2>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="card">
+            <h5>Events by Category</h5>
+            <canvas id="eventCategoryChart"></canvas>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="card">
+            <h5>Sales Revenue Over Time</h5>
+            <canvas id="salesRevenueChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      async function loadEventCategoryChart() {
+        const response = await fetch(
+          "http://localhost:8080/api/analytics/events-by-category"
+        );
+        const data = await response.json();
+
+        const categories = data.map((item) => item.category);
+        const eventCounts = data.map((item) => item.eventCount);
+
+        new Chart(document.getElementById("eventCategoryChart"), {
+          type: "pie",
+          data: {
+            labels: categories,
+            datasets: [
+              {
+                label: "Events by Category",
+                data: eventCounts,
+                backgroundColor: [
+                  "#FF5733",
+                  "#33FF57",
+                  "#3357FF",
+                  "#FF33A1",
+                  "#FFC300",
+                ],
+                borderWidth: 2,
+                hoverOffset: 10,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: "bottom",
+                labels: { font: { size: 14 } },
+              },
+            },
+          },
+        });
+      }
+
+      async function loadSalesRevenueChart() {
+        const startDate = "2024-01-01";
+        const endDate = "2025-12-31";
+        const response = await fetch(
+          `http://localhost:8080/api/analytics/sales-revenue?start=${startDate}&end=${endDate}`
+        );
+        const data = await response.json();
+
+        const dates = data.map((item) => item.date);
+        const revenues = data.map((item) => item.revenue);
+
+        new Chart(document.getElementById("salesRevenueChart"), {
+          type: "line",
+          data: {
+            labels: dates,
+            datasets: [
+              {
+                label: "Sales Revenue ($)",
+                data: revenues,
+                borderColor: "#38a169",
+                backgroundColor: "rgba(56, 161, 105, 0.3)",
+                fill: true,
+                borderWidth: 3,
+                pointRadius: 5,
+                pointBackgroundColor: "#38a169",
+                tension: 0.3,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            scales: {
+              x: { grid: { display: false }, ticks: { font: { size: 12 } } },
+              y: { beginAtZero: true, ticks: { font: { size: 12 } } },
+            },
+            plugins: {
+              legend: { display: false },
+            },
+          },
+        });
+      }
+
+      loadEventCategoryChart();
+      loadSalesRevenueChart();
+    </script>
+  </body>
+</html>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tickets - Event Management System</title>
+    <title>Tickets - Degson Event Management System</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -13,7 +13,6 @@
       rel="stylesheet"
     />
     <style>
-      /* Sidebar styling */
       body {
         font-family: "Poppins", sans-serif;
         background-color: #f4f7fe;
@@ -87,7 +86,7 @@
         margin-bottom: 20px;
       }
 
-      /* Table styling */
+      
       .custom-table thead {
         background-color: #48bb78;
         color: white;
@@ -120,12 +119,12 @@
       .custom-table {
         width: 100%;
         border-collapse: separate;
-        border-spacing: 0 10px; /* Increased spacing between rows */
+        border-spacing: 0 10px; 
         background-color: transparent;
       }
 
       .custom-table tbody td {
-        padding: 6px; /* Reduced padding for smaller cell height */
+        padding: 6px; 
         text-align: left;
         border-bottom: none;
       }
@@ -142,33 +141,33 @@
         justify-content: space-between;
       }
       .glass-image {
-        background: rgba(255, 255, 255, 0.8); /* Example glass effect */
+        background: rgba(255, 255, 255, 0.8); 
         padding: 20px;
-        border-radius: 10px; /* Rounded corners for the glass effect */
+        border-radius: 10px; 
       }
 
       .icon-container {
         display: flex;
-        align-items: center; /* Center items vertically */
+        align-items: center; 
       }
 
       .profile {
-        width: 40px; /* Adjust size as needed */
-        height: 40px; /* Adjust size as needed */
-        background-color: #48bb78; /* Green background */
-        color: white; /* Text color */
-        border-radius: 50%; /* Circle shape */
+        width: 40px; 
+        height: 40px; 
+        background-color: #48bb78; 
+        color: white; 
+        border-radius: 50%; 
         display: flex;
-        align-items: center; /* Center text vertically */
-        justify-content: center; /* Center text horizontally */
-        margin-right: 10px; /* Space between the profile and logout */
-        font-weight: bold; /* Optional: make the text stand out */
+        align-items: center; 
+        justify-content: center; 
+        margin-right: 10px; 
+        font-weight: bold; 
       }
 
       a {
-        text-decoration: none; /* Remove underline */
-        color: black; /* Link color */
-        font-weight: 500; /* Optional: make the link text bold */
+        text-decoration: none; 
+        color: black; 
+        font-weight: 500; 
       }
 
       .btn-custom {
@@ -186,6 +185,16 @@
       .btn-custom:hover {
         background: #3aa366;
         transform: scale(1.05);
+      }
+
+      .btn-save{
+        background: #48bb78;
+        color: white;
+      }
+
+      .confirm-logout {
+        background-color: #48bb78;
+        color: white;
       }
     </style>
   </head>
@@ -207,7 +216,11 @@
         <div class="glass-image mt-4">
           <div class="icon-container">
             <div class="profile"></div>
-            <a href="login.html" onclick="logout()">
+            <a 
+            class="nav-link"
+            href="javascript:void(0);"
+            onclick="confirmLogout()"
+            >
               <i class="bi bi-box-arrow-right"></i> Logout
             </a>
           </div>
@@ -226,7 +239,8 @@
           <i class="bi bi-plus-circle"></i> Add Ticket
         </button>
       </div>
-      <!-- Modal -->
+      
+
       <div
         class="modal fade"
         id="ticketModal"
@@ -307,7 +321,7 @@
                     required
                   />
                 </div>
-                <button type="submit" class="btn btn-primary">
+                <button type="submit" class="btn btn-save">
                   Save Ticket
                 </button>
               </form>
@@ -315,6 +329,7 @@
           </div>
         </div>
       </div>
+
 
       <table class="custom-table">
         <thead>
@@ -332,10 +347,53 @@
         </thead>
         <tbody id="tickets-table-body">
           <tr></tr>
-          <!-- Add more rows as needed -->
         </tbody>
       </table>
     </div>
+
+
+
+    <div
+      class="modal fade"
+      id="logoutModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="logoutModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-body">Are you sure you want to logout?</div>
+          <div class="modal-footer container grid justify-content-float-right">
+            <div class="row">
+              <div class="col-6">
+                <button
+                  type="button"
+                  class="btn btn-secondary btn-sm"
+                  data-bs-dismiss="modal"
+                >
+                  Cancel
+                </button>
+              </div>
+              <div class="col-6">
+                <button
+                  type="button"
+                  class="btn confirm-logout btn-sm"
+                  onclick="logout()"
+                >
+                  Logout
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script th:src="@{/javascript/events.js}"></script>
     <script>
       document.addEventListener("DOMContentLoaded", () => {
@@ -343,9 +401,8 @@
         const tableBody = document.getElementById("tickets-table-body");
         const ticketForm = document.getElementById("ticket-form");
 
-        let editingTicketId = null; // Stores ticket ID for editing mode
+        let editingTicketId = null; 
 
-        // ** Fetch tickets from API and populate table **
         function loadTickets() {
           fetch(`${apiUrl}/all`)
             .then((response) => {
@@ -357,7 +414,7 @@
               return response.json();
             })
             .then((tickets) => {
-              tableBody.innerHTML = ""; // Clear existing rows
+              tableBody.innerHTML = ""; 
               tickets.forEach((ticket, index) => {
                 const row = document.createElement("tr");
                 row.innerHTML = `
@@ -370,7 +427,7 @@
                 <td>${new Date(ticket.salesStartDate).toLocaleDateString()}</td>
                 <td>${new Date(ticket.salesEndDate).toLocaleDateString()}</td>
                 <td class="actions">
-                  <button class="btn btn-outline-primary btn-sm edit-btn" data-id="${
+                  <button class="btn btn-outline-success btn-sm edit-btn" data-id="${
                     ticket.id
                   }">
                     <i class="bi bi-pencil"></i> Edit
@@ -385,7 +442,7 @@
                 tableBody.appendChild(row);
               });
 
-              // Attach event listeners after rows are added
+              
               document.querySelectorAll(".edit-btn").forEach((button) => {
                 button.addEventListener("click", handleEditTicket);
               });
@@ -397,14 +454,14 @@
             .catch((error) => console.error("Error fetching tickets:", error));
         }
 
-        loadTickets(); // Initial call to load tickets
+        loadTickets(); 
 
-        // ** Handle Form Submission (Create or Update Ticket) **
+        
         ticketForm.addEventListener("submit", (e) => {
           e.preventDefault();
 
           const ticketData = {
-            event: { id: parseInt(document.getElementById("eventId").value) }, // Ensure event ID is sent
+            event: { id: parseInt(document.getElementById("eventId").value) }, 
             ticketType: document.getElementById("ticketType").value,
             price: parseFloat(document.getElementById("price").value),
             quantityAvailable: parseInt(
@@ -416,7 +473,7 @@
           };
 
           if (editingTicketId) {
-            // ** Update existing ticket **
+            
             fetch(`${apiUrl}/${editingTicketId}`, {
               method: "PUT",
               headers: { "Content-Type": "application/json" },
@@ -434,11 +491,11 @@
                 alert("Ticket updated successfully!");
                 loadTickets();
                 ticketForm.reset();
-                editingTicketId = null; // Reset editing mode
+                editingTicketId = null;
               })
               .catch((error) => console.error("Error updating ticket:", error));
           } else {
-            // ** Create new ticket **
+            
             fetch(apiUrl, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -461,7 +518,7 @@
           }
         });
 
-        // ** Handle Editing Ticket **
+        
         function handleEditTicket(event) {
           const ticketId =
             event.target.dataset.id ||
@@ -496,7 +553,7 @@
             .catch((error) => console.error("Error fetching ticket:", error));
         }
 
-        // ** Handle Deleting Ticket **
+        
         function handleDeleteTicket(event) {
           const ticketId =
             event.target.dataset.id ||
@@ -518,8 +575,20 @@
           }
         }
       });
-    </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+      function confirmLogout() {
+        $("#logoutModal").modal("show");
+        console.log("Logging out...");
+      }
+      function logout() {
+       
+        localStorage.clear();
+        
+        console.log("Local storage cleared. Logging out...");
+        
+        window.location.href = "login.html";
+      }
+    
+</script>
   </body>
 </html>
